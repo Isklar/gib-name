@@ -20,17 +20,25 @@ async def exit(ctx):
 
 @bot.command()
 async def name(ctx):
+
+    try:
         member = ctx.author
         newNick = random_word().capitalize()
         await ctx.channel.send('I bestow upon you the name of ༼ つ ◕_◕ ༽つ {0}'.format(newNick))
         await member.edit(nick=newNick)
+    except Exception as e:
+                print(e)
 
 def random_word():
-    req = urllib.request.Request(url)
-    response = urllib.request.urlopen(req)
-    data = response.read()
-    values = json.loads(data)
-    word = values[0]["word"]
+    try:
+        req = urllib.request.Request(url)
+        response = urllib.request.urlopen(req)
+        data = response.read()
+        values = json.loads(data)
+        word = values[0]["word"]
+    except Exception as e:
+                print(e)
+
     return(word)
 
 if __name__ == "__main__":
