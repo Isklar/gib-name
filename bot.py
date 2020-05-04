@@ -43,6 +43,9 @@ def random_word():
 
 if __name__ == "__main__":
     token = os.environ['CLIENT_TOKEN']
-    bot.run(token)
+    try:
+        bot.run(token)
+    except Exception as e:
+        print(e)
     
     
