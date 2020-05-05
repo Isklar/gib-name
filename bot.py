@@ -4,7 +4,7 @@ import asyncio
 import urllib
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix='gib ')
+bot = commands.Bot(command_prefix='gib ', case_insensitive=True)
 
 api_token = os.environ['API_TOKEN']
 
@@ -18,7 +18,7 @@ async def on_ready():
 async def exit(ctx):
     await bot.logout()
 
-@bot.command()
+@bot.command(case_insensitive=True)
 async def name(ctx):
 
     try:
