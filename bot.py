@@ -53,7 +53,7 @@ async def definition(ctx):
         response = urllib.request.urlopen(req)
         data = response.read()
         values = json.loads(data)
-        text = values["text"]
+        text = values[0]["text"]
 
         await ctx.channel.send('{0}'.format(text))
 
