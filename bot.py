@@ -46,16 +46,16 @@ async def definition(ctx):
 
     try:
         member = ctx.author
-        nickname = member.nick.lower()
+        nickname = member.nick
 
-        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key={1}'.format(nickname, api_token)
+        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&sourceDictionaries=wordnet&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.lower(), api_token)
         req = urllib.request.Request(definitionUrl)
         response = urllib.request.urlopen(req)
         data = response.read()
         values = json.loads(data)
         text = values[0]["text"]
 
-        await ctx.channel.send('{0}'.format(text))
+        await ctx.channel.send('**{0}** - {1}'.format(nickname, text))
 
     except Exception as e:
                 print(e)
