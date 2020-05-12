@@ -23,9 +23,21 @@ async def name(ctx):
 
     try:
         member = ctx.author
-        newNick = random_word().capitalize()
-        await ctx.channel.send('I bestow upon you the name of ༼ つ ◕_◕ ༽つ {0}'.format(newNick))
-        await member.edit(nick=newNick)
+        newNick = random_word()
+        await ctx.channel.send('I bestow upon you the name of ༼ つ ◕_◕ ༽つ **{0}**'.format(newNick.capitalize()))
+
+        topExampleUrl = 'https://api.wordnik.com/v4/word.json/{0}/topExample?useCanonical=false&api_key={1}'.format(newNick, api_token)
+        req = urllib.request.Request(topExampleUrl)
+        response = urllib.request.urlopen(req)
+        data = response.read()
+        values = json.loads(data)
+        text = values["text"]
+
+        splitStr = text.split(newNick)
+
+        await ctx.channel.send('{0}**{1}**{2}'.format(splitStr[0], newNick,splitStr[1]))
+        await member.edit(nick=newNick.capitalize())
+
     except Exception as e:
                 print(e)
 
