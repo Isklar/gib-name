@@ -24,7 +24,7 @@ async def name(ctx):
     try:
         member = ctx.author
         newNick = random_word()
-        await ctx.channel.send('I bestow upon you the name of ༼ つ ◕_◕ ༽つ **{0}**'.format(newNick.capitalize()))
+        await ctx.channel.send('I bestow upon you the name of ༼ つ ◕◡◕ ༽つ **{0}**'.format(newNick.capitalize()))
 
         topExampleUrl = 'https://api.wordnik.com/v4/word.json/{0}/topExample?useCanonical=false&api_key={1}'.format(newNick, api_token)
         req = urllib.request.Request(topExampleUrl)
