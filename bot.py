@@ -41,6 +41,26 @@ async def name(ctx):
     except Exception as e:
                 print(e)
 
+@bot.command(case_insensitive=True)
+async def definition(ctx):
+
+    try:
+        member = ctx.author
+        nickname = member.nick.lower()
+
+        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key={1}'.format(nickname, api_token)
+        req = urllib.request.Request(topExampleUrl)
+        response = urllib.request.urlopen(req)
+        data = response.read()
+        values = json.loads(data)
+        text = values["text"]
+
+        await ctx.channel.send('{0}'.format(text))
+
+    except Exception as e:
+                print(e)
+
+
 def random_word():
     try:
         req = urllib.request.Request(url)
