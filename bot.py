@@ -48,7 +48,7 @@ async def definition(ctx):
         member = ctx.author
         nickname = member.nick
 
-        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&sourceDictionaries=wordnet&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.lower(), api_token)
+        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&caseSensitive=false&sourceDictionaries=wordnet&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.lower(), api_token)
         req = urllib.request.Request(definitionUrl)
         response = urllib.request.urlopen(req)
         data = response.read()
