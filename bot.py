@@ -4,7 +4,7 @@ import asyncio
 import urllib
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix='gib ', case_insensitive=True)
+bot = commands.Bot(command_prefix=['gib ','Gib '], case_insensitive=True)
 
 api_token = os.environ['API_TOKEN']
 
