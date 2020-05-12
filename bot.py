@@ -49,7 +49,7 @@ async def definition(ctx):
         nickname = member.nick.lower()
 
         definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key={1}'.format(nickname, api_token)
-        req = urllib.request.Request(topExampleUrl)
+        req = urllib.request.Request(definitionUrl)
         response = urllib.request.urlopen(req)
         data = response.read()
         values = json.loads(data)
