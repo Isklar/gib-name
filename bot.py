@@ -44,26 +44,52 @@ async def name(ctx):
 @bot.command(case_insensitive=True)
 async def definition(ctx):
 
+    member = ctx.author
+    nickname = member.nick
+    definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.lower(), api_token)
+    retryRequest = False
+
     try:
-        member = ctx.author
-        nickname = member.nick
-
-        definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&sourceDictionaries=wordnet&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.lower(), api_token)
-        req = urllib.request.Request(definitionUrl)
-        response = urllib.request.urlopen(req)
-        if response.getcode() == 404:
-            definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&sourceDictionaries=wordnet&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.capitalize(), api_token)
-            req = urllib.request.Request(definitionUrl)
-            response = urllib.request.urlopen(req)
-
+        response = urllib.request.urlopen(definitionUrl)
+    except urllib.error.HTTPError as e:
+        # Return code error (e.g. 404, 501, ...)
+        print('HTTPError: {}'.format(e.code))
+        retryRequest = True
+    except urllib.error.URLError as e:
+        # Not an HTTP-specific error (e.g. connection refused)
+        print('URLError: {}'.format(e.reason))
+        retryRequest = False
+    else:
+        # 200
+        retryRequest = False
         data = response.read()
         values = json.loads(data)
-        text = values[0]["text"]
+        text = values[0]["text"].replace('<xref>', '')
+        text = text.replace('</xref>', '')
+        await ctx.channel.send('**{0}** - {1}'.format(nickname.capitalize(), text))
 
-        await ctx.channel.send('**{0}** - {1}'.format(nickname, text))
+    if retryRequest == True:
+        print("Retrying with capitalised word...")
+        try:
+            definitionUrl = 'https://api.wordnik.com/v4/word.json/{0}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key={1}'.format(nickname.capitalize(), api_token)
+            response = urllib.request.urlopen(definitionUrl)
+        except urllib.error.HTTPError as e:
+            # Return code error (e.g. 404, 501, ...)
+            print('HTTPError: {}'.format(e.code))
+            retryRequest = False
+        except urllib.error.URLError as e:
+            # Not an HTTP-specific error (e.g. connection refused)
+            print('URLError: {}'.format(e.reason))
+            retryRequest = False
+        else:
+            # 200
+            retryRequest = False
+            data = response.read()
+            values = json.loads(data)
+            text = values[0]["text"].replace('<xref>', '')
+            text = text.replace('</xref>', '')
+            await ctx.channel.send('**{0}** - {1}'.format(nickname.capitalize(), text))
 
-    except Exception as e:
-                print(e)
 
 
 def random_word():
